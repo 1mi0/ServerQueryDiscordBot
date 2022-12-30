@@ -1,4 +1,5 @@
 bin/
+gcm.cache/
 libs/
 
 src/Secret.hpp

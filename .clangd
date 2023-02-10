@@ -2,3 +2,9 @@ CompileFlags:
     Add: [--std=c++20, -Ilibs/boost_1_81_0/boost/]
     Compiler: clang++-15
 
+Diagnostics:
+    ClangTidy:
+        Add: [bugprone*, cppcoreguidelines*, performance*, readability*, modernize*]
+        Remove: [cppcoreguidelines-prefer-member-initializer, cppcoreguidelines-avoid-c-arrays, readability-identifier-length, cppcoreguidelines-avoid-magic-numbers, readability-magic-numbers, modernize-avoid-c-arrays]
+        IndentWidth: 4
+

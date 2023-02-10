@@ -1,6 +1,9 @@
 #pragma once
 
 #include "pch.hpp"
+#include <mutex>
+
+namespace mi0::sync {
 
 class ServerManagerTimer {
 public:
@@ -44,3 +47,5 @@ private:
     std::mutex                   _mtx;
     std::vector<channel_details> _vec;
 };
+
+}

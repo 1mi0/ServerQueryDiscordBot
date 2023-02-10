@@ -4,8 +4,8 @@
 using namespace mi0::bot;
 
 Bot::Bot(const std::string &TOKEN,
-                   std::shared_ptr<ChannelsVector> channels,
-                   std::shared_ptr<ServerManagerTimer> mngr)
+                   std::shared_ptr<mi0::sync::ChannelsVector> channels,
+                   std::shared_ptr<mi0::sync::ServerManagerTimer> mngr)
     : _mngr(std::move(mngr)), _channels(std::move(channels)),
       _bot(TOKEN, dpp::i_default_intents | dpp::i_privileged_intents) {
 
@@ -45,7 +45,7 @@ void Bot::on_command_handle(const dpp::slashcommand_t &event) {
     } else if (event.command.get_command_name() == "bind") {
         auto ip           = std::get<std::string>(event.get_parameter("serverip"));
         auto port         = stoi(std::get<std::string>(event.get_parameter("serverport")));
-        auto channel_info = ChannelsVector::channel_details(ip, port, event.command.channel_id);
+        auto channel_info = mi0::sync::ChannelsVector::channel_details(ip, port, event.command.channel_id);
 
         _channels->push_back(std::move(channel_info));
         _mngr->EarlyWake();

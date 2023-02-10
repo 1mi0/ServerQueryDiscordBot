@@ -1,7 +1,7 @@
 CXX = clang++-15
 CC = clang-15
 
-CXXFLAGS = -std=c++20 -O3 -g3 --debug -Wall -Wextra
+CXXFLAGS = -std=c++20 -O3 -g3 -Wall -Wextra
 CXXFLAGS += -I/usr/include/dpp-10.0/dpp/
 CXXFLAGS += -I./libs/boost_1_81_0/boost/
 CXXFLAGS += -I./bin/pch/

@@ -7,7 +7,7 @@ namespace mi0::bot {
 
 class Bot {
 public:
-    Bot(const std::string &TOKEN, std::shared_ptr<ChannelsVector> channels, std::shared_ptr<ServerManagerTimer> mngr);
+    Bot(const std::string &TOKEN, std::shared_ptr<mi0::sync::ChannelsVector> channels, std::shared_ptr<mi0::sync::ServerManagerTimer> mngr);
 
 private:
     void on_ready_handle(const dpp::ready_t &);
@@ -15,9 +15,9 @@ private:
     void on_command_handle(const dpp::slashcommand_t &event);
 
   public:
-    std::shared_ptr<ServerManagerTimer> _mngr;
-    std::shared_ptr<ChannelsVector>     _channels;
-    dpp::cluster                        _bot;
+    std::shared_ptr<mi0::sync::ServerManagerTimer> _mngr;
+    std::shared_ptr<mi0::sync::ChannelsVector>     _channels;
+    dpp::cluster                                   _bot;
 };
 
 }

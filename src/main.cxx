@@ -3,16 +3,18 @@
 #include "impl/SourceSockets.hpp"
 #include "Secret.hpp"
 #include "sql/Sql.hpp"
+#include "sql/SqlFunctions.hpp"
+#include <memory>
 
 class ServerManager {
 public:
     ServerManager(const std::string& token) noexcept
-        : _channels(std::make_shared<ChannelsVector>()), _mngr(std::make_shared<ServerManagerTimer>()) {
+        : _channels(std::make_shared<mi0::sync::ChannelsVector>()), _mngr(std::make_shared<mi0::sync::ServerManagerTimer>()) {
         
         // Bot starts running
         _bot = std::make_unique<mi0::bot::Bot>(token, _channels, _mngr);
 
-        const auto channel_for_each = [this](const ChannelsVector::channel_details& details) {
+        const auto channel_for_each = [this](const mi0::sync::ChannelsVector::channel_details& details) {
             try { 
                 // SourceSocket handles the network stuff and just returns
                 // a future InfoResponseParser -- that's the response which
@@ -34,7 +36,7 @@ public:
     }
 
 private:
-    void sendEmbed(const ChannelsVector::channel_details& details, mi0::srv::InfoResponseParser pr) {
+    void sendEmbed(const mi0::sync::ChannelsVector::channel_details& details, mi0::srv::InfoResponseParser pr) {
         this->_bot->_bot.message_create(
             dpp::message(details.channel, "")
                 .add_embed(dpp::embed()
@@ -49,16 +51,21 @@ private:
     }
 // TODO: move embed to the server specific stuff
 
-    std::shared_ptr<ChannelsVector>     _channels;
-    std::shared_ptr<ServerManagerTimer> _mngr;
-    std::unique_ptr<mi0::bot::Bot>      _bot;
+    std::shared_ptr<mi0::sync::ChannelsVector>     _channels;
+    std::shared_ptr<mi0::sync::ServerManagerTimer> _mngr;
+    std::unique_ptr<mi0::bot::Bot>                 _bot;
 };
 
 
 auto main() -> int {
     //ServerManager sm(BOT_TOKEN);
+    // TODO: UNIT TESTING!!! REALLY IMPORTANT
     SQL sql;
-    auto shit = sql.GetActiveServers();
-    pqxx::result asd;
-    std::cout << shit[0]["address"] << ":" << shit[0]["port"] << std::endl;
+    auto req = std::make_unique<SQL_Request_SelectActive>();
+    auto ft = req->GetFuture();
+    sql.ExecuteRequest(std::unique_ptr<RequestExecutor>(std::move(req)));
+    auto res = ft.get();
+    for (auto el : res) {
+        std::cout << el["address"] << ":" << el["port"] << std::endl;
+    }
 }
